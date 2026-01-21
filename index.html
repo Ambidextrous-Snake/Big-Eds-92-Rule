@@ -1,0 +1,1691 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Big Ed's $92 Rule</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Press Start 2P', cursive;
+            background: linear-gradient(180deg, #87ceeb 0%, #98d98e 100%);
+            color: #fff;
+            overflow-x: hidden;
+            min-height: 100vh;
+            position: relative;
+        }
+        
+        /* Village scene - using your uploaded image */
+        body::before {
+            content: '';
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 200%;
+            height: 60%;
+            background: 
+                /* Use the reference image pattern - simplified pixel village */
+                url('https://images.unsplash.com/photo-1614732414444-096e5f1122d5?w=2000') repeat-x center bottom,
+                linear-gradient(180deg, transparent 0%, #5c8a3d 60%, #4a7c2f 100%);
+            background-size: auto 100%, 100% 100%;
+            animation: village-scroll 180s linear infinite;
+            z-index: -10;
+            pointer-events: none;
+            opacity: 0.9;
+        }
+        
+        @keyframes village-scroll {
+            from { background-position: 0 bottom, 0 0; }
+            to { background-position: -2000px bottom, 0 0; }
+        }
+        
+        /* Foreground grass overlay */
+        body::after {
+            content: '';
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 15%;
+            background: 
+                repeating-linear-gradient(
+                    90deg,
+                    #5c8a3d 0px,
+                    #5c8a3d 12px,
+                    #6b9d47 12px,
+                    #6b9d47 24px
+                );
+            z-index: -8;
+            pointer-events: none;
+        }
+        
+        /* Animated 8-bit villagers */
+        .star {
+            position: absolute;
+            width: 16px;
+            height: 24px;
+            bottom: 180px;
+            animation: villager-walk 20s linear infinite;
+        }
+        
+        /* Villager sprite with different colors */
+        .star::before {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: 
+                /* Head */
+                radial-gradient(circle 6px at 8px 6px, #fdbcb4 0%, #fdbcb4 100%),
+                /* Body */
+                linear-gradient(180deg, transparent 8px, var(--shirt-color, #4a90e2) 8px, var(--shirt-color, #4a90e2) 16px, transparent 16px),
+                /* Legs */
+                linear-gradient(180deg, transparent 16px, var(--pants-color, #2d5f8d) 16px, var(--pants-color, #2d5f8d) 24px, transparent 24px);
+            background-repeat: no-repeat;
+            animation: walk-cycle 0.4s steps(2) infinite;
+        }
+        
+        @keyframes villager-walk {
+            from { 
+                left: -50px;
+                transform: scaleX(1);
+            }
+            49% { 
+                transform: scaleX(1);
+            }
+            50% { 
+                transform: scaleX(-1);
+            }
+            to { 
+                left: calc(100% + 50px);
+                transform: scaleX(-1);
+            }
+        }
+        
+        @keyframes walk-cycle {
+            0% { transform: translateY(0); }
+            50% { transform: translateY(-2px); }
+        }
+        
+        /* Container */
+        .container {
+            position: relative;
+            z-index: 1;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        /* Title Screen - Wood Sign Style with realistic texture */
+        .title-screen {
+            text-align: center;
+            padding: 60px 20px;
+            background: 
+                /* Wood grain */
+                repeating-linear-gradient(
+                    0deg,
+                    #d4a574 0px,
+                    #c19162 2px,
+                    #b8885a 3px,
+                    #c19162 5px,
+                    #d4a574 8px
+                ),
+                linear-gradient(90deg, 
+                    rgba(101, 67, 33, 0.2) 0%, 
+                    transparent 50%, 
+                    rgba(101, 67, 33, 0.2) 100%);
+            border: 8px solid #6d5839;
+            border-radius: 12px;
+            box-shadow: 
+                0 0 0 3px #8b6f47,
+                inset 0 3px 10px rgba(0, 0, 0, 0.4),
+                inset 0 -3px 10px rgba(255, 255, 255, 0.1),
+                0 12px 0 #6d5839,
+                0 16px 30px rgba(0, 0, 0, 0.7);
+            margin-bottom: 40px;
+            position: relative;
+            overflow: visible;
+            animation: sign-sway 5s ease-in-out infinite;
+        }
+        
+        @keyframes sign-sway {
+            0%, 100% { transform: rotate(0deg); }
+            25% { transform: rotate(-0.5deg); }
+            75% { transform: rotate(0.5deg); }
+        }
+        
+        /* Hanging chain */
+        .title-screen::before {
+            content: '';
+            position: absolute;
+            top: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 50px;
+            height: 50px;
+            background: 
+                radial-gradient(circle at center, #4a4a4a 30%, #2d2d2d 31%, #2d2d2d 60%, transparent 61%);
+            border: 4px solid #1a1a1a;
+            border-radius: 50%;
+            box-shadow: inset 0 2px 5px rgba(255, 255, 255, 0.3);
+        }
+        
+        /* Chain link to roof */
+        .title-screen::after {
+            content: '';
+            position: absolute;
+            top: -60px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 12px;
+            height: 60px;
+            background: 
+                repeating-linear-gradient(
+                    0deg,
+                    #4a4a4a 0px,
+                    #2d2d2d 3px,
+                    #4a4a4a 6px
+                );
+            border-radius: 6px;
+            box-shadow: inset 0 1px 2px rgba(255, 255, 255, 0.2);
+        }
+        
+        .pixel-corner {
+            position: absolute;
+            width: 25px;
+            height: 25px;
+            background: #90ee90;
+            box-shadow: 0 0 15px rgba(144, 238, 144, 0.8);
+            animation: leaf-flutter 3s ease-in-out infinite;
+        }
+        
+        .pixel-corner.top-left {
+            top: -5px;
+            left: -5px;
+            border-radius: 50% 0 50% 50%;
+            border: 3px solid #228b22;
+        }
+        
+        .pixel-corner.top-right {
+            top: -5px;
+            right: -5px;
+            border-radius: 0 50% 50% 50%;
+            border: 3px solid #228b22;
+        }
+        
+        .pixel-corner.bottom-left {
+            bottom: -5px;
+            left: -5px;
+            border-radius: 50% 50% 0 50%;
+            border: 3px solid #228b22;
+        }
+        
+        .pixel-corner.bottom-right {
+            bottom: -5px;
+            right: -5px;
+            border-radius: 50% 50% 50% 0;
+            border: 3px solid #228b22;
+        }
+        
+        @keyframes leaf-flutter {
+            0%, 100% { transform: rotate(0deg) scale(1); }
+            25% { transform: rotate(-10deg) scale(1.05); }
+            75% { transform: rotate(10deg) scale(1.05); }
+        }
+        
+        h1 {
+            font-size: clamp(18px, 4vw, 32px);
+            color: #2d1f12;
+            text-shadow: 
+                2px 2px 0 rgba(255, 255, 255, 0.5),
+                3px 3px 5px rgba(0, 0, 0, 0.3);
+            margin-bottom: 20px;
+            animation: title-bounce 3s ease-in-out infinite;
+            letter-spacing: 2px;
+        }
+        
+        @keyframes title-bounce {
+            0%, 100% { 
+                transform: translateY(0) scale(1);
+                filter: brightness(1);
+            }
+            50% { 
+                transform: translateY(-8px) scale(1.02);
+                filter: brightness(1.1);
+            }
+        }
+        
+        .subtitle {
+            font-size: clamp(8px, 2vw, 14px);
+            color: #8b4513;
+            text-shadow: 
+                1px 1px 0 rgba(255, 255, 255, 0.5);
+            line-height: 1.8;
+        }
+        
+        /* Status Bar - Wood Panel */
+        .status-bar {
+            background: 
+                repeating-linear-gradient(
+                    0deg,
+                    #c19162 0px,
+                    #b8885a 1px,
+                    #a87d52 2px,
+                    #b8885a 3px,
+                    #c19162 5px
+                );
+            border: 4px solid #6d5839;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 20px;
+            box-shadow: 
+                inset 0 2px 5px rgba(255, 255, 255, 0.2),
+                inset 0 -2px 5px rgba(0, 0, 0, 0.3),
+                0 6px 0 #5c4a3a,
+                0 8px 20px rgba(0, 0, 0, 0.5);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .status-bar::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, 
+                transparent 0%, 
+                rgba(255, 215, 0, 0.3) 20%, 
+                rgba(255, 237, 78, 0.3) 50%, 
+                rgba(255, 215, 0, 0.3) 80%, 
+                transparent 100%);
+            animation: shine-sweep 3s infinite;
+        }
+        
+        @keyframes shine-sweep {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+        
+        .status-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: rgba(0, 0, 0, 0.3);
+            padding: 8px 12px;
+            border-radius: 8px;
+            border: 2px solid rgba(109, 88, 57, 0.5);
+        }
+        
+        .status-label {
+            font-size: 10px;
+            color: #f5deb3;
+            text-shadow: 1px 1px 0 #000;
+        }
+        
+        .status-value {
+            font-size: 12px;
+            color: #fff;
+            animation: value-pulse 2s infinite;
+            text-shadow: 0 0 10px #ffeb3b;
+        }
+        
+        @keyframes value-pulse {
+            0%, 100% { 
+                opacity: 1;
+                text-shadow: 0 0 10px #ffeb3b;
+            }
+            50% { 
+                opacity: 0.8;
+                text-shadow: 0 0 20px #ffeb3b, 0 0 30px #ffd700;
+            }
+        }
+        
+        /* Character Stats - Wood Panels */
+        .character-stats {
+            background: 
+                repeating-linear-gradient(
+                    0deg,
+                    #b8885a 0px,
+                    #a87d52 1px,
+                    #9a7049 2px,
+                    #a87d52 3px,
+                    #b8885a 5px
+                );
+            border: 4px solid #6d5839;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 30px;
+            box-shadow: 
+                inset 0 2px 5px rgba(255, 255, 255, 0.2),
+                inset 0 -2px 5px rgba(0, 0, 0, 0.3),
+                0 6px 0 #5c4a3a,
+                0 8px 20px rgba(0, 0, 0, 0.5);
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+        }
+        
+        .stat-group {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 12px;
+            border-radius: 8px;
+            border: 3px solid rgba(109, 88, 57, 0.5);
+            box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.4);
+        }
+        
+        .stat-header {
+            font-size: 10px;
+            color: #f5deb3;
+            text-shadow: 1px 1px 0 #000;
+            margin-bottom: 10px;
+            padding-bottom: 6px;
+            border-bottom: 2px solid rgba(245, 222, 179, 0.3);
+            text-align: center;
+        }
+        
+        .stat-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+            font-size: 9px;
+        }
+        
+        .stat-name {
+            color: #d4a574;
+            text-shadow: 1px 1px 0 #000;
+        }
+        
+        .stat-value {
+            color: #ffeb3b;
+            text-shadow: 1px 1px 0 #000;
+            font-weight: bold;
+        }
+        
+        .stat-bar {
+            width: 100%;
+            height: 12px;
+            background: rgba(0, 0, 0, 0.6);
+            border: 2px solid #4a3420;
+            border-radius: 6px;
+            overflow: hidden;
+            margin-top: 4px;
+            position: relative;
+        }
+        
+        .stat-bar-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #64b5f6 0%, #90caf9 100%);
+            transition: width 0.5s ease;
+            box-shadow: inset 0 2px 5px rgba(255, 255, 255, 0.5);
+            position: relative;
+        }
+        
+        .stat-bar-fill.gold {
+            background: linear-gradient(90deg, #ffb74d 0%, #ffcc80 100%);
+        }
+        
+        .stat-bar-fill.green {
+            background: linear-gradient(90deg, #81c784 0%, #a5d6a7 100%);
+        }
+        
+        .stat-bar-fill::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 50%;
+            background: linear-gradient(180deg, rgba(255, 255, 255, 0.4) 0%, transparent 100%);
+        }
+        
+        /* Leaderboard - Realistic Wood Board Style */
+        .leaderboard {
+            background: 
+                /* Wood grain texture */
+                repeating-linear-gradient(
+                    0deg,
+                    #d4a574 0px,
+                    #c19162 2px,
+                    #b8885a 3px,
+                    #c19162 5px,
+                    #d4a574 8px
+                ),
+                linear-gradient(90deg, 
+                    rgba(101, 67, 33, 0.1) 0%, 
+                    transparent 50%, 
+                    rgba(101, 67, 33, 0.1) 100%);
+            border: 8px solid #6d5839;
+            border-radius: 8px;
+            padding: 25px;
+            box-shadow: 
+                /* 3D depth effect */
+                0 0 0 3px #8b6f47,
+                0 0 0 6px #6d5839,
+                inset 0 3px 10px rgba(0, 0, 0, 0.4),
+                inset 0 -3px 10px rgba(255, 255, 255, 0.1),
+                0 15px 0 #5c4a3a,
+                0 20px 40px rgba(0, 0, 0, 0.6);
+            position: relative;
+        }
+        
+        /* Corner metal brackets */
+        .leaderboard::before {
+            content: '';
+            position: absolute;
+            top: -8px;
+            left: -8px;
+            width: 40px;
+            height: 40px;
+            background: 
+                linear-gradient(135deg, #2d2d2d 0%, #4a4a4a 50%, #2d2d2d 100%);
+            border: 3px solid #1a1a1a;
+            border-radius: 4px;
+            box-shadow: inset 0 1px 2px rgba(255, 255, 255, 0.3);
+        }
+        
+        .leaderboard::after {
+            content: '';
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            width: 40px;
+            height: 40px;
+            background: 
+                linear-gradient(135deg, #2d2d2d 0%, #4a4a4a 50%, #2d2d2d 100%);
+            border: 3px solid #1a1a1a;
+            border-radius: 4px;
+            box-shadow: inset 0 1px 2px rgba(255, 255, 255, 0.3);
+        }
+        
+        .leaderboard-header {
+            text-align: center;
+            font-size: clamp(12px, 2.5vw, 18px);
+            color: #2d1f12;
+            margin-bottom: 25px;
+            padding: 15px;
+            background: 
+                repeating-linear-gradient(
+                    0deg,
+                    #f5deb3 0px,
+                    #e6c8a0 2px,
+                    #d4a574 4px,
+                    #e6c8a0 6px,
+                    #f5deb3 8px
+                );
+            border-radius: 8px;
+            border: 4px solid #8b6f47;
+            text-shadow: 
+                1px 1px 0 rgba(255, 255, 255, 0.5);
+            animation: header-glow 3s infinite;
+            position: relative;
+            box-shadow: 
+                inset 0 3px 8px rgba(255, 255, 255, 0.3),
+                inset 0 -3px 8px rgba(0, 0, 0, 0.3),
+                0 4px 0 #6d5839;
+        }
+        
+        .leaderboard-header::before {
+            content: '🌟';
+            position: absolute;
+            left: 20px;
+            animation: star-twinkle 2s ease-in-out infinite;
+        }
+        
+        .leaderboard-header::after {
+            content: '🌟';
+            position: absolute;
+            right: 20px;
+            animation: star-twinkle 2s ease-in-out infinite reverse;
+        }
+        
+        @keyframes header-glow {
+            0%, 100% { 
+                box-shadow: 
+                    inset 0 3px 8px rgba(255, 255, 255, 0.3),
+                    inset 0 -3px 8px rgba(0, 0, 0, 0.3),
+                    0 4px 0 #6d5839;
+            }
+            50% { 
+                box-shadow: 
+                    inset 0 3px 8px rgba(255, 255, 255, 0.4),
+                    inset 0 -3px 8px rgba(0, 0, 0, 0.3),
+                    0 4px 0 #6d5839,
+                    0 0 20px rgba(255, 235, 59, 0.3);
+            }
+        }
+        
+        @keyframes star-twinkle {
+            0%, 100% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.2); opacity: 0.7; }
+        }
+        
+        .stock-list {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        
+        .stock-item {
+            background: 
+                /* Lighter wood planks for cards */
+                repeating-linear-gradient(
+                    0deg,
+                    #f5deb3 0px,
+                    #e6c8a0 1px,
+                    #d4a574 2px,
+                    #e6c8a0 3px,
+                    #f5deb3 5px
+                ),
+                linear-gradient(90deg, 
+                    rgba(139, 111, 71, 0.1) 0%, 
+                    transparent 50%, 
+                    rgba(139, 111, 71, 0.1) 100%);
+            border: 4px solid #8b6f47;
+            border-radius: 8px;
+            padding: 15px;
+            display: grid;
+            grid-template-columns: 50px 1fr auto;
+            gap: 15px;
+            align-items: center;
+            position: relative;
+            transition: all 0.3s ease;
+            animation: note-appear 0.6s ease-out;
+            box-shadow: 
+                inset 0 2px 5px rgba(255, 255, 255, 0.3),
+                inset 0 -2px 5px rgba(0, 0, 0, 0.2),
+                0 6px 0 #c19162,
+                0 8px 15px rgba(0, 0, 0, 0.4);
+        }
+        
+        /* Wood grain highlight */
+        .stock-item::before {
+            content: '';
+            position: absolute;
+            top: 5px;
+            left: 5px;
+            right: 5px;
+            height: 1px;
+            background: rgba(255, 255, 255, 0.4);
+        }
+        
+        @keyframes note-appear {
+            from {
+                transform: translateY(-30px) rotate(-5deg);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0) rotate(0);
+                opacity: 1;
+            }
+        }
+        
+        .stock-item:hover {
+            transform: translateY(-5px) scale(1.02);
+            border-color: #6d5839;
+            box-shadow: 
+                inset 0 2px 5px rgba(255, 255, 255, 0.4),
+                inset 0 -2px 5px rgba(0, 0, 0, 0.2),
+                0 10px 0 #c19162,
+                0 14px 25px rgba(0, 0, 0, 0.5);
+        }
+        
+        .rank {
+            font-size: 24px;
+            color: #fff;
+            text-align: center;
+            text-shadow: 
+                2px 2px 0 #2e7d32,
+                0 0 15px #90ee90;
+            background: linear-gradient(135deg, #66bb6a 0%, #81c784 100%);
+            padding: 8px;
+            border-radius: 50%;
+            border: 3px solid #2e7d32;
+            width: 50px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            animation: rank-pulse 2s infinite;
+            box-shadow: 0 3px 0 #1b5e20, inset 0 2px 5px rgba(255, 255, 255, 0.4);
+        }
+        
+        @keyframes rank-pulse {
+            0%, 100% { box-shadow: 0 3px 0 #1b5e20, 0 0 10px rgba(144, 238, 144, 0.3); }
+            50% { box-shadow: 0 3px 0 #1b5e20, 0 0 20px rgba(144, 238, 144, 0.6); }
+        }
+        
+        .stock-info {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        
+        .stock-symbol {
+            font-size: clamp(12px, 2vw, 16px);
+            color: #2d1f12;
+            text-shadow: 
+                1px 1px 0 rgba(255, 255, 255, 0.5);
+            letter-spacing: 1px;
+        }
+        
+        .stock-price {
+            font-size: clamp(10px, 1.5vw, 12px);
+            color: #8b4513;
+            text-shadow: 1px 1px 0 rgba(255, 255, 255, 0.3);
+        }
+        
+        .stock-distance {
+            font-size: 8px;
+            color: #5d4037;
+            font-style: italic;
+        }
+        
+        .stock-status {
+            padding: 12px;
+            border-radius: 6px;
+            font-size: 10px;
+            text-align: center;
+            min-width: 110px;
+            font-weight: bold;
+            box-shadow: 0 4px 0 rgba(0, 0, 0, 0.4);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .stock-status::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, 
+                transparent 0%, 
+                rgba(255, 255, 255, 0.3) 50%, 
+                transparent 100%);
+            animation: status-shine 3s infinite;
+        }
+        
+        @keyframes status-shine {
+            0% { left: -100%; }
+            100% { left: 200%; }
+        }
+        
+        /* Status variants - Fantasy themed */
+        .status-champion {
+            background: 
+                radial-gradient(circle at 30% 30%, #fff9c4, #ffd700 40%, #ff8c00);
+            color: #000;
+            border: 3px solid #8b4513;
+            animation: 
+                champion-glow 1.5s infinite, 
+                legendary-float 3s ease-in-out infinite;
+            text-shadow: 
+                1px 1px 0 rgba(255, 255, 255, 0.5),
+                0 0 10px #fff;
+        }
+        
+        @keyframes champion-glow {
+            0%, 100% { 
+                box-shadow: 
+                    0 0 30px #ffd700, 
+                    0 0 50px #ff8c00,
+                    0 4px 0 rgba(0, 0, 0, 0.4),
+                    inset 0 0 20px rgba(255, 255, 255, 0.3);
+            }
+            50% { 
+                box-shadow: 
+                    0 0 50px #ffd700, 
+                    0 0 80px #ff8c00,
+                    0 4px 0 rgba(0, 0, 0, 0.4),
+                    inset 0 0 30px rgba(255, 255, 255, 0.5);
+            }
+        }
+        
+        @keyframes legendary-float {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            25% { transform: translateY(-5px) rotate(-3deg); }
+            75% { transform: translateY(-5px) rotate(3deg); }
+        }
+        
+        .status-critical {
+            background: 
+                radial-gradient(circle at 30% 30%, #ff6b6b, #dc143c 40%, #8b0000);
+            color: #fff;
+            border: 3px solid #ffd700;
+            animation: 
+                critical-pulse 0.8s infinite,
+                danger-shake 0.5s infinite;
+            text-shadow: 
+                1px 1px 0 #000,
+                0 0 15px #ff0000;
+        }
+        
+        @keyframes critical-pulse {
+            0%, 100% { 
+                box-shadow: 
+                    0 0 20px #ff0000,
+                    0 0 40px #dc143c,
+                    0 4px 0 rgba(0, 0, 0, 0.4);
+            }
+            50% { 
+                box-shadow: 
+                    0 0 40px #ff0000,
+                    0 0 60px #dc143c,
+                    0 4px 0 rgba(0, 0, 0, 0.4);
+                transform: scale(1.05);
+            }
+        }
+        
+        @keyframes danger-shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-2px); }
+            75% { transform: translateX(2px); }
+        }
+        
+        .status-warning {
+            background: 
+                radial-gradient(circle at 30% 30%, #ffb347, #ff8c00 40%, #d2691e);
+            color: #000;
+            border: 3px solid #8b4513;
+            animation: warning-glow 1.5s infinite;
+            text-shadow: 
+                1px 1px 0 rgba(255, 255, 255, 0.5),
+                0 0 10px #ff8c00;
+        }
+        
+        @keyframes warning-glow {
+            0%, 100% { 
+                box-shadow: 
+                    0 0 15px #ff8c00,
+                    0 4px 0 rgba(0, 0, 0, 0.4);
+            }
+            50% { 
+                box-shadow: 
+                    0 0 30px #ff8c00,
+                    0 4px 0 rgba(0, 0, 0, 0.4);
+            }
+        }
+        
+        .status-climbing {
+            background: 
+                radial-gradient(circle at 30% 30%, #a0d468, #8cc152 40%, #6a9d3c);
+            color: #000;
+            border: 3px solid #4a7c2f;
+            animation: climbing-pulse 1.5s infinite;
+            text-shadow: 
+                1px 1px 0 rgba(255, 255, 255, 0.5),
+                0 0 10px #90ee90;
+        }
+        
+        @keyframes climbing-pulse {
+            0%, 100% { 
+                box-shadow: 
+                    0 0 15px #90ee90,
+                    0 4px 0 rgba(0, 0, 0, 0.4);
+            }
+            50% { 
+                box-shadow: 
+                    0 0 30px #90ee90,
+                    0 4px 0 rgba(0, 0, 0, 0.4);
+                transform: scale(1.03);
+            }
+        }
+        
+        .status-safe {
+            background: 
+                radial-gradient(circle at 30% 30%, #87ceeb, #4682b4 40%, #1e3a5f);
+            color: #fff;
+            border: 3px solid #5c4a3a;
+            text-shadow: 
+                1px 1px 0 #000,
+                0 0 10px #87ceeb;
+            box-shadow: 
+                0 0 15px rgba(135, 206, 235, 0.3),
+                0 4px 0 rgba(0, 0, 0, 0.4);
+        }
+        
+        /* Victory Modal - Stardew Valley Festival Style */
+        .victory-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at center, 
+                    rgba(92, 138, 61, 0.95) 0%, 
+                    rgba(74, 124, 47, 0.98) 100%);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            backdrop-filter: blur(5px);
+        }
+        
+        .victory-modal.active {
+            display: flex;
+            animation: modal-fade-in 0.5s ease-out;
+        }
+        
+        @keyframes modal-fade-in {
+            from { 
+                opacity: 0;
+                backdrop-filter: blur(0px);
+            }
+            to { 
+                opacity: 1;
+                backdrop-filter: blur(5px);
+            }
+        }
+        
+        .victory-content {
+            background: 
+                linear-gradient(135deg, #fff8e1 0%, #ffecb3 50%, #fff8e1 100%);
+            border: 8px solid #8b6f47;
+            border-radius: 20px;
+            padding: 50px 40px;
+            text-align: center;
+            max-width: 600px;
+            position: relative;
+            box-shadow: 
+                0 0 80px rgba(255, 235, 59, 0.8),
+                0 0 120px rgba(144, 238, 144, 0.6),
+                inset 0 0 80px rgba(255, 255, 255, 0.5),
+                0 20px 0 #6d5839;
+            animation: victory-bounce 0.8s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            overflow: hidden;
+        }
+        
+        .victory-content::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: 
+                repeating-conic-gradient(
+                    from 0deg at 50% 50%,
+                    transparent 0deg,
+                    rgba(255, 235, 59, 0.1) 10deg,
+                    transparent 20deg
+                );
+            animation: festival-spin 20s linear infinite;
+            pointer-events: none;
+        }
+        
+        @keyframes festival-spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+        
+        @keyframes victory-bounce {
+            from {
+                transform: scale(0.3) translateY(100px);
+                opacity: 0;
+            }
+            to {
+                transform: scale(1) translateY(0);
+                opacity: 1;
+            }
+        }
+        
+        .victory-title {
+            font-size: clamp(16px, 4vw, 28px);
+            color: #2e7d32;
+            margin-bottom: 20px;
+            text-shadow: 
+                3px 3px 0 #ffeb3b,
+                6px 6px 0 #f57c00,
+                0 0 30px #90ee90,
+                0 0 50px #76ff03;
+            animation: celebration-bounce 1.5s ease-in-out infinite;
+            position: relative;
+            z-index: 1;
+            letter-spacing: 2px;
+        }
+        
+        @keyframes celebration-bounce {
+            0%, 100% { 
+                transform: scale(1) rotate(0deg);
+            }
+            25% { 
+                transform: scale(1.1) rotate(-3deg);
+            }
+            50% { 
+                transform: scale(1.15) rotate(0deg);
+            }
+            75% { 
+                transform: scale(1.1) rotate(3deg);
+            }
+        }
+        
+        .victory-stock {
+            font-size: clamp(24px, 6vw, 42px);
+            color: #1b5e20;
+            margin: 25px 0;
+            animation: prize-float 2s ease-in-out infinite;
+            text-shadow: 
+                3px 3px 0 #ffeb3b,
+                0 0 30px #90ee90,
+                0 0 50px #76ff03;
+            position: relative;
+            z-index: 1;
+            letter-spacing: 3px;
+        }
+        
+        @keyframes prize-float {
+            0%, 100% { transform: translateY(0) scale(1); }
+            50% { transform: translateY(-20px) scale(1.08); }
+        }
+        
+        .victory-price {
+            font-size: clamp(16px, 3.5vw, 28px);
+            color: #f57c00;
+            margin-bottom: 20px;
+            text-shadow: 
+                2px 2px 0 #ffeb3b,
+                0 0 20px #ffb74d;
+            animation: gold-shimmer 2s infinite;
+            position: relative;
+            z-index: 1;
+        }
+        
+        @keyframes gold-shimmer {
+            0%, 100% { 
+                color: #f57c00;
+                text-shadow: 
+                    2px 2px 0 #ffeb3b,
+                    0 0 20px #ffb74d;
+            }
+            50% { 
+                color: #ff9800;
+                text-shadow: 
+                    2px 2px 0 #fff59d,
+                    0 0 40px #ffb74d,
+                    0 0 60px #ff9800;
+            }
+        }
+        
+        .victory-close {
+            background: 
+                linear-gradient(135deg, #66bb6a, #81c784);
+            color: #fff;
+            border: 4px solid #2e7d32;
+            border-radius: 12px;
+            padding: 18px 35px;
+            font-family: 'Press Start 2P', cursive;
+            font-size: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 
+                0 6px 0 #1b5e20,
+                0 8px 20px rgba(46, 125, 50, 0.5),
+                inset 0 2px 5px rgba(255, 255, 255, 0.4);
+            position: relative;
+            z-index: 1;
+            text-shadow: 2px 2px 0 #1b5e20;
+        }
+        
+        .victory-close:hover {
+            background: 
+                linear-gradient(135deg, #81c784, #a5d6a7);
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 
+                0 9px 0 #1b5e20,
+                0 12px 30px rgba(46, 125, 50, 0.8),
+                0 0 40px rgba(144, 238, 144, 0.6),
+                inset 0 2px 8px rgba(255, 255, 255, 0.6);
+        }
+        
+        .victory-close:active {
+            transform: translateY(0);
+            box-shadow: 
+                0 3px 0 #1b5e20,
+                0 4px 10px rgba(46, 125, 50, 0.5),
+                inset 0 2px 5px rgba(255, 255, 255, 0.4);
+        }
+        
+        /* Magical Particles */
+        .firework {
+            position: fixed;
+            width: 6px;
+            height: 6px;
+            background: radial-gradient(circle, #ffd700, #ff8c00);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 999;
+            box-shadow: 
+                0 0 10px #ffd700,
+                0 0 20px #ff8c00;
+        }
+        
+        /* Loading */
+        .loading {
+            text-align: center;
+            padding: 40px;
+            font-size: 14px;
+            color: #00ff00;
+            animation: blink 1s infinite;
+        }
+        
+        /* Start Screen */
+        #start-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.85);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 10000;
+            animation: fade-in 0.5s ease-out;
+        }
+        
+        #start-screen.hidden {
+            display: none;
+        }
+        
+        .start-content {
+            text-align: center;
+            padding: 60px 40px;
+            background: 
+                repeating-linear-gradient(
+                    0deg,
+                    #d4a574 0px,
+                    #c19162 2px,
+                    #b8885a 3px,
+                    #c19162 5px,
+                    #d4a574 8px
+                );
+            border: 10px solid #6d5839;
+            border-radius: 16px;
+            box-shadow: 
+                0 0 0 4px #8b6f47,
+                inset 0 4px 15px rgba(0, 0, 0, 0.4),
+                inset 0 -4px 15px rgba(255, 255, 255, 0.1),
+                0 20px 0 #5c4a3a,
+                0 25px 50px rgba(0, 0, 0, 0.8);
+            max-width: 600px;
+            position: relative;
+        }
+        
+        .start-title {
+            font-size: clamp(24px, 5vw, 48px);
+            color: #2d1f12;
+            text-shadow: 
+                2px 2px 0 rgba(255, 255, 255, 0.5),
+                4px 4px 8px rgba(0, 0, 0, 0.4);
+            margin-bottom: 30px;
+            animation: title-pulse 2s ease-in-out infinite;
+        }
+        
+        @keyframes title-pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+        
+        .start-subtitle {
+            font-size: clamp(10px, 2vw, 16px);
+            color: #8b4513;
+            margin-bottom: 40px;
+            line-height: 1.8;
+            text-shadow: 1px 1px 0 rgba(255, 255, 255, 0.3);
+        }
+        
+        .start-button {
+            background: linear-gradient(135deg, #66bb6a 0%, #81c784 100%);
+            color: #fff;
+            border: 5px solid #2e7d32;
+            border-radius: 12px;
+            padding: 20px 50px;
+            font-family: 'Press Start 2P', cursive;
+            font-size: clamp(12px, 2.5vw, 18px);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 
+                0 6px 0 #1b5e20,
+                0 8px 20px rgba(46, 125, 50, 0.5),
+                inset 0 2px 5px rgba(255, 255, 255, 0.4);
+            text-shadow: 2px 2px 0 #1b5e20;
+            animation: button-bounce 2s ease-in-out infinite;
+        }
+        
+        @keyframes button-bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-5px); }
+        }
+        
+        .start-button:hover {
+            background: linear-gradient(135deg, #81c784 0%, #a5d6a7 100%);
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 
+                0 9px 0 #1b5e20,
+                0 12px 30px rgba(46, 125, 50, 0.8),
+                0 0 40px rgba(144, 238, 144, 0.6),
+                inset 0 2px 8px rgba(255, 255, 255, 0.6);
+        }
+        
+        .start-button:active {
+            transform: translateY(0);
+            box-shadow: 
+                0 3px 0 #1b5e20,
+                0 4px 10px rgba(46, 125, 50, 0.5),
+                inset 0 2px 5px rgba(255, 255, 255, 0.4);
+        }
+        
+        .start-info {
+            margin-top: 30px;
+            font-size: 10px;
+            color: #6d5839;
+            text-shadow: 1px 1px 0 rgba(255, 255, 255, 0.3);
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .stock-item {
+                grid-template-columns: 40px 1fr;
+                gap: 10px;
+            }
+            
+            .stock-status {
+                grid-column: 2;
+                margin-top: 10px;
+            }
+            
+            .rank {
+                font-size: 18px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Start Screen -->
+    <div id="start-screen">
+        <div class="start-content">
+            <div class="start-title">BIG ED'S $92 RULE</div>
+            <div class="start-subtitle">
+                🏘️ WELCOME TO THE VILLAGE 🏘️<br>
+                TRACK NYSE STOCKS ON THEIR<br>
+                LEGENDARY QUEST TO $92
+            </div>
+            <button class="start-button" onclick="startApp()">
+                BEGIN QUEST
+            </button>
+            <div class="start-info">
+                LIVE MARKET DATA • REAL-TIME UPDATES
+            </div>
+        </div>
+    </div>
+    
+    <div class="starfield" id="starfield"></div>
+    
+    <div class="container">
+        <div class="title-screen">
+            <div class="pixel-corner top-left"></div>
+            <div class="pixel-corner top-right"></div>
+            <div class="pixel-corner bottom-left"></div>
+            <div class="pixel-corner bottom-right"></div>
+            
+            <h1>BIG ED'S $92 RULE</h1>
+            <p class="subtitle">
+                LEGENDARY QUEST OF THE NYSE REALM<br>
+                WITNESS THE RISE TO $92 GLORY
+            </p>
+        </div>
+        
+        <div class="status-bar">
+            <div class="status-item">
+                <span class="status-label">REALM STATUS:</span>
+                <span class="status-value" id="questStatus">SCANNING...</span>
+            </div>
+            <div class="status-item">
+                <span class="status-label">LEGENDS:</span>
+                <span class="status-value" id="championCount">0</span>
+            </div>
+            <div class="status-item">
+                <span class="status-label">LAST VISION:</span>
+                <span class="status-value" id="lastUpdate">--:--:--</span>
+            </div>
+        </div>
+        
+        <div class="character-stats">
+            <div class="stat-group">
+                <div class="stat-header">⚔️ MARKET ATTRIBUTES ⚔️</div>
+                <div class="stat-row">
+                    <span class="stat-name">TRACKING POWER</span>
+                    <span class="stat-value" id="trackingPower">250</span>
+                </div>
+                <div class="stat-bar">
+                    <div class="stat-bar-fill" style="width: 83%" id="trackingBar"></div>
+                </div>
+                <div class="stat-row" style="margin-top: 8px;">
+                    <span class="stat-name">SCAN SPEED</span>
+                    <span class="stat-value" id="scanSpeed">180</span>
+                </div>
+                <div class="stat-bar">
+                    <div class="stat-bar-fill" style="width: 60%" id="scanBar"></div>
+                </div>
+            </div>
+            
+            <div class="stat-group">
+                <div class="stat-header">🏆 QUEST PROGRESS 🏆</div>
+                <div class="stat-row">
+                    <span class="stat-name">LEGENDS FOUND</span>
+                    <span class="stat-value" id="legendsFound">0</span>
+                </div>
+                <div class="stat-bar">
+                    <div class="stat-bar-fill gold" style="width: 0%" id="legendsBar"></div>
+                </div>
+                <div class="stat-row" style="margin-top: 8px;">
+                    <span class="stat-name">STOCKS WATCHED</span>
+                    <span class="stat-value" id="stocksWatched">10</span>
+                </div>
+                <div class="stat-bar">
+                    <div class="stat-bar-fill green" style="width: 10%" id="watchedBar"></div>
+                </div>
+            </div>
+            
+            <div class="stat-group">
+                <div class="stat-header">💰 REALM STATISTICS 💰</div>
+                <div class="stat-row">
+                    <span class="stat-name">CLOSEST TO $92</span>
+                    <span class="stat-value" id="closestStock">---</span>
+                </div>
+                <div class="stat-row">
+                    <span class="stat-name">DISTANCE</span>
+                    <span class="stat-value" id="closestDistance">$--.--</span>
+                </div>
+                <div class="stat-row" style="margin-top: 8px;">
+                    <span class="stat-name">AVG PRICE</span>
+                    <span class="stat-value" id="avgPrice">$--.--</span>
+                </div>
+            </div>
+        </div>
+        
+        <div class="leaderboard">
+            <div class="leaderboard-header">
+                HALL OF ASCENDING HEROES
+            </div>
+            <div id="stockList" class="stock-list">
+                <div class="loading">SUMMONING REALM DATA...</div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="victory-modal" id="victoryModal">
+        <div class="victory-content">
+            <div class="victory-title">🍗 CHICKEN DINNER! 🍗</div>
+            <div class="victory-stock" id="victoryStock">---</div>
+            <div class="victory-price" id="victoryPrice">$---.--</div>
+            <div style="font-size: 12px; color: #f0e68c; margin-bottom: 25px; line-height: 1.8; position: relative; z-index: 1; text-shadow: 1px 1px 0 #000, 0 0 15px #ffd700;">
+                HAS CONQUERED THE $92 SUMMIT<br>
+                FOR THE FIRST TIME IN HISTORY!<br>
+                <span style="color: #ffd700; font-size: 14px; margin-top: 8px; display: inline-block;">WINNER WINNER!</span>
+            </div>
+            <button class="victory-close" onclick="closeVictory()">CONTINUE QUEST</button>
+        </div>
+    </div>
+
+    <script>
+        // Start screen function
+        function startApp() {
+            document.getElementById('start-screen').classList.add('hidden');
+            updateStocks(); // Start fetching data
+        }
+        
+        // Create 8-bit villagers walking around with random shirt colors
+        function createStarfield() {
+            const starfield = document.getElementById('starfield');
+            const shirtColors = ['#4a90e2', '#e74c3c', '#f39c12', '#2ecc71', '#9b59b6', '#1abc9c'];
+            const pantsColors = ['#2d5f8d', '#34495e', '#7f8c8d', '#2c3e50'];
+            
+            // Create 6-10 villagers
+            const numVillagers = 6 + Math.floor(Math.random() * 5);
+            for (let i = 0; i < numVillagers; i++) {
+                const villager = document.createElement('div');
+                villager.className = 'star';
+                villager.style.bottom = (120 + Math.random() * 80) + 'px';
+                villager.style.animationDelay = (i * 2.5) + 's';
+                villager.style.animationDuration = (15 + Math.random() * 10) + 's';
+                villager.style.setProperty('--shirt-color', shirtColors[Math.floor(Math.random() * shirtColors.length)]);
+                villager.style.setProperty('--pants-color', pantsColors[Math.floor(Math.random() * pantsColors.length)]);
+                starfield.appendChild(villager);
+            }
+        }
+        
+        createStarfield();
+        
+        // Stock tracking
+        let trackedStocks = new Set();
+        let champions = new Set();
+        
+        // Real-time stock data from Finnhub API with alternative CORS proxy
+        async function fetchStockData() {
+            const API_KEY = 'd5oh559r01qjast6mv10d5oh559r01qjast6mv1g';
+            
+            // NYSE stocks to track - only stocks that could realistically be near $30-$92
+            const stockSymbols = [
+                // Tech & Growth (under $92)
+                'PLTR', 'SOFI', 'SNAP', 'HOOD', 'PATH', 'PINS', 'LYFT', 'U', 'DOCU', 
+                'ZM', 'OKTA', 'DELL', 'HPE', 'INTC', 'AMD', 'QCOM', 'MU',
+                
+                // Financial Services
+                'BAC', 'WFC', 'C', 'USB', 'PNC', 'TFC', 'SCHW', 'MS', 'GS', 
+                'COF', 'DFS', 'SYF', 'ALLY', 'KEY', 'CFG', 'FITB', 'HBAN', 'RF', 'ZION',
+                'CG', 'IBKR', 'AXP',
+                
+                // Energy & Oil
+                'XOM', 'CVX', 'COP', 'SLB', 'HAL', 'BKR', 'OXY', 'DVN', 'EOG', 'PXD',
+                'MPC', 'PSX', 'VLO', 'HES', 'APA', 'FANG', 'CTRA', 'MRO', 'OVV', 'PR',
+                
+                // Materials & Mining
+                'FCX', 'NUE', 'STLD', 'CLF', 'X', 'MT', 'AA', 'CENX', 'SCCO', 'GOLD',
+                'AEM', 'AUY', 'KGC', 'HL', 'PAAS', 'AG', 'CDE',
+                'MOS', 'CF', 'NTR', 'ALB', 'SQM', 'LYB', 'DOW', 'DD', 'EMN',
+                
+                // Industrials & Manufacturing
+                'CAT', 'DE', 'HON', 'MMM', 'GE', 'EMR', 'ETN', 'ITW', 'PH',
+                'ROK', 'DOV', 'XYL', 'FTV', 'IR', 'AME', 'IEX', 'CARR', 'OTIS',
+                
+                // Auto & Transportation
+                'F', 'GM', 'STLA', 'RIVN', 'LCID', 'TM', 'HMC', 'AAL', 'UAL',
+                'DAL', 'LUV', 'JBLU', 'ALK', 'CHRW', 'XPO',
+                
+                // Consumer & Retail
+                'TGT', 'M', 'KSS', 'JWN', 'GPS', 'ANF', 'AEO', 'EXPR', 'URBN', 
+                'KR', 'DG', 'DLTR', 'BBY',
+                
+                // Healthcare & Pharma
+                'PFE', 'MRK', 'BMY', 'ABBV', 'GILD', 'AMGN', 'CVS', 'CI', 'HUM', 
+                'CNC', 'ELV', 'MOH', 'BIIB', 'EXAS', 'BSX', 'MDT', 'ABT', 'ZBH',
+                
+                // Media & Entertainment
+                'WBD', 'PARA', 'CMCSA', 'T', 'TMUS', 'VZ', 'CHTR', 'DISH',
+                'FOXA', 'FOX', 'MSGS', 'MSG', 'LYV', 'WMG', 'CNK', 'AMC',
+                
+                // Real Estate REITs
+                'O', 'VTR', 'ESS', 'MAA', 'UDR', 'CPT', 'KIM', 'REG', 'FRT',
+                
+                // Utilities & Infrastructure
+                'D', 'AEP', 'EXC', 'SRE', 'PEG', 'XEL', 'ED',
+                'WEC', 'ES', 'FE', 'ETR', 'DTE', 'PPL', 'AEE', 'CMS', 'CNP', 'NI',
+                
+                // Commodities & Energy Plays
+                'SWN', 'AR', 'VALE', 'BBD', 'PLUG', 'BE', 'FCEL', 'BLDP', 'CLNE', 'RIG',
+                'VAL', 'NE', 'SD', 'HP', 'CHK', 'RRC', 'CIVI', 'SM', 'MGY', 'MTDR',
+                
+                // Chinese ADRs & Others
+                'BABA', 'NIO', 'UBER', 'DKNG', 'ABNB', 'COIN', 'NET'
+            ];
+            
+            const stockData = [];
+            const batchSize = 3;
+            
+            // Calculate timestamps for 5 years of data
+            const now = Math.floor(Date.now() / 1000);
+            const fiveYearsAgo = now - (5 * 365 * 24 * 60 * 60);
+            
+            console.log('Starting to fetch stock data with 5-year history check...');
+            
+            for (let i = 0; i < stockSymbols.length; i += batchSize) {
+                const batch = stockSymbols.slice(i, i + batchSize);
+                const batchPromises = batch.map(async (symbol) => {
+                    try {
+                        console.log(`Fetching ${symbol}...`);
+                        
+                        // First get current price
+                        let quoteResponse;
+                        try {
+                            quoteResponse = await fetch(
+                                `https://finnhub.io/api/v1/quote?symbol=${symbol}&token=${API_KEY}`
+                            );
+                        } catch (directError) {
+                            console.log(`Direct fetch failed for ${symbol}, trying proxy...`);
+                            const proxyUrl = `https://api.allorigins.win/raw?url=${encodeURIComponent(`https://finnhub.io/api/v1/quote?symbol=${symbol}&token=${API_KEY}`)}`;
+                            quoteResponse = await fetch(proxyUrl);
+                        }
+                        
+                        const quoteData = await quoteResponse.json();
+                        
+                        if (quoteData.c && quoteData.c > 0) {
+                            const currentPrice = quoteData.c;
+                            
+                            // Now get 5 years of historical data to find all-time high
+                            let historicalResponse;
+                            try {
+                                historicalResponse = await fetch(
+                                    `https://finnhub.io/api/v1/stock/candle?symbol=${symbol}&resolution=D&from=${fiveYearsAgo}&to=${now}&token=${API_KEY}`
+                                );
+                            } catch (directError) {
+                                console.log(`Direct historical fetch failed for ${symbol}, trying proxy...`);
+                                const proxyUrl = `https://api.allorigins.win/raw?url=${encodeURIComponent(`https://finnhub.io/api/v1/stock/candle?symbol=${symbol}&resolution=D&from=${fiveYearsAgo}&to=${now}&token=${API_KEY}`)}`;
+                                historicalResponse = await fetch(proxyUrl);
+                            }
+                            
+                            const historicalData = await historicalResponse.json();
+                            
+                            // Find the true all-time high from historical data
+                            let allTimeHigh = currentPrice;
+                            if (historicalData.h && Array.isArray(historicalData.h) && historicalData.h.length > 0) {
+                                allTimeHigh = Math.max(...historicalData.h);
+                                console.log(`${symbol}: Current=$${currentPrice.toFixed(2)}, 5-Year High=$${allTimeHigh.toFixed(2)}`);
+                            } else {
+                                console.log(`${symbol}: No historical data available, using current price`);
+                            }
+                            
+                            // Only include stocks that:
+                            // 1. Are currently under $92
+                            // 2. Have NEVER been above $92 in the last 5 years
+                            // 3. Are above $30 for relevance
+                            if (currentPrice < 92 && currentPrice > 30 && allTimeHigh < 92) {
+                                console.log(`✓ ${symbol}: $${currentPrice.toFixed(2)} (5Y High: $${allTimeHigh.toFixed(2)}) - QUALIFIED!`);
+                                
+                                return {
+                                    symbol: symbol,
+                                    price: currentPrice,
+                                    historicalMax: allTimeHigh
+                                };
+                            } else if (allTimeHigh >= 92) {
+                                console.log(`✗ ${symbol}: Has been above $92 (5Y High: $${allTimeHigh.toFixed(2)}) - EXCLUDED`);
+                            } else {
+                                console.log(`✗ ${symbol}: $${currentPrice.toFixed(2)} (outside price range)`);
+                            }
+                        } else {
+                            console.log(`✗ ${symbol}: Invalid data`);
+                        }
+                    } catch (error) {
+                        console.error(`Error fetching ${symbol}:`, error);
+                    }
+                    return null;
+                });
+                
+                const batchResults = await Promise.all(batchPromises);
+                stockData.push(...batchResults.filter(stock => stock !== null));
+                
+                if (i + batchSize < stockSymbols.length) {
+                    await new Promise(resolve => setTimeout(resolve, 600));
+                }
+            }
+            
+            console.log(`✅ Total stocks found that have NEVER been above $92: ${stockData.length}`);
+            return stockData.sort((a, b) => b.price - a.price);
+        }
+        
+        function getStockStatus(price, historicalMax) {
+            if (price >= 92 && historicalMax < 92) {
+                return 'champion';
+            } else if (price >= 91) {
+                return 'critical';
+            } else if (price >= 89) {
+                return 'warning';
+            } else if (price >= 87) {
+                return 'climbing';
+            } else {
+                return 'safe';
+            }
+        }
+        
+        function getStatusText(status) {
+            switch(status) {
+                case 'champion': return '👑 LEGEND!';
+                case 'critical': return '⚡ AT THE GATES!';
+                case 'warning': return '🔥 FINAL PUSH!';
+                case 'climbing': return '⛰️ CLIMBING!';
+                default: return '🛡️ QUESTING';
+            }
+        }
+        
+        function createFirework(x, y) {
+            for (let i = 0; i < 30; i++) {
+                const firework = document.createElement('div');
+                firework.className = 'firework';
+                firework.style.left = x + 'px';
+                firework.style.top = y + 'px';
+                document.body.appendChild(firework);
+                
+                const angle = (Math.PI * 2 * i) / 30;
+                const velocity = 2 + Math.random() * 3;
+                const vx = Math.cos(angle) * velocity;
+                const vy = Math.sin(angle) * velocity;
+                
+                let posX = x;
+                let posY = y;
+                let life = 100;
+                
+                const animate = () => {
+                    posX += vx;
+                    posY += vy;
+                    life -= 2;
+                    
+                    firework.style.left = posX + 'px';
+                    firework.style.top = posY + 'px';
+                    firework.style.opacity = life / 100;
+                    
+                    if (life > 0) {
+                        requestAnimationFrame(animate);
+                    } else {
+                        firework.remove();
+                    }
+                };
+                
+                animate();
+            }
+        }
+        
+        function showVictory(symbol, price) {
+            document.getElementById('victoryStock').textContent = symbol;
+            document.getElementById('victoryPrice').textContent = `$${price.toFixed(2)}`;
+            document.getElementById('victoryModal').classList.add('active');
+            
+            // Create multiple fireworks
+            for (let i = 0; i < 5; i++) {
+                setTimeout(() => {
+                    const x = Math.random() * window.innerWidth;
+                    const y = Math.random() * window.innerHeight;
+                    createFirework(x, y);
+                }, i * 300);
+            }
+        }
+        
+        function closeVictory() {
+            document.getElementById('victoryModal').classList.remove('active');
+        }
+        
+        async function updateStocks() {
+            const stocks = await fetchStockData();
+            const stockList = document.getElementById('stockList');
+            
+            // Check for new champions
+            stocks.forEach(stock => {
+                const status = getStockStatus(stock.price, stock.historicalMax);
+                if (status === 'champion' && !champions.has(stock.symbol)) {
+                    champions.add(stock.symbol);
+                    showVictory(stock.symbol, stock.price);
+                }
+            });
+            
+            // Update champion count
+            document.getElementById('championCount').textContent = champions.size;
+            
+            // Take top 10
+            const top10 = stocks.slice(0, 10);
+            
+            // Update stat screen
+            document.getElementById('legendsFound').textContent = champions.size;
+            document.getElementById('legendsBar').style.width = Math.min(champions.size * 10, 100) + '%';
+            
+            if (top10.length > 0) {
+                const closest = top10[0];
+                document.getElementById('closestStock').textContent = closest.symbol;
+                document.getElementById('closestDistance').textContent = '$' + (92 - closest.price).toFixed(2);
+                
+                const avgPrice = top10.reduce((sum, s) => sum + s.price, 0) / top10.length;
+                document.getElementById('avgPrice').textContent = '$' + avgPrice.toFixed(2);
+            }
+            
+            document.getElementById('stocksWatched').textContent = top10.length;
+            document.getElementById('watchedBar').style.width = (top10.length * 10) + '%';
+            
+            stockList.innerHTML = top10.map((stock, index) => {
+                const status = getStockStatus(stock.price, stock.historicalMax);
+                const distance = 92 - stock.price;
+                
+                return `
+                    <div class="stock-item" style="animation-delay: ${index * 0.1}s">
+                        <div class="rank">${index + 1}</div>
+                        <div class="stock-info">
+                            <div class="stock-symbol">${stock.symbol}</div>
+                            <div class="stock-price">$${stock.price.toFixed(2)}</div>
+                            <div class="stock-distance">${distance > 0 ? `$${distance.toFixed(2)} from summit` : 'SUMMIT REACHED!'}</div>
+                        </div>
+                        <div class="stock-status status-${status}">
+                            ${getStatusText(status)}
+                        </div>
+                    </div>
+                `;
+            }).join('');
+            
+            // Update last update time
+            const now = new Date();
+            document.getElementById('lastUpdate').textContent = now.toLocaleTimeString();
+            document.getElementById('questStatus').textContent = 'ACTIVE';
+        }
+        
+        // Initial load - DON'T start automatically, wait for start button
+        // updateStocks(); // This will be called when startApp() is triggered
+        
+        // Update every 2 minutes (120 seconds) to respect API rate limits
+        // Finnhub free tier allows 60 calls/minute
+        setInterval(updateStocks, 120000);
+        
+        // Add note about real API integration
+        setTimeout(() => {
+            console.log('%c⚔️ BIG ED\'S $92 RULE ⚔️', 'font-size: 20px; color: #ffd700; font-weight: bold;');
+            console.log('%c🍗 NOW WITH REAL-TIME FINNHUB DATA! 🍗', 'font-size: 16px; color: #ff8c00; font-weight: bold;');
+            console.log('%cTracking live NYSE stock prices from Finnhub API', 'font-size: 14px; color: #f0e68c;');
+            console.log('%cUpdates every 2 minutes to respect rate limits', 'font-size: 12px; color: #d4af37;');
+            console.log('Stocks being tracked:', 'color: #87ceeb');
+            console.log('BABA, NIO, PLTR, SOFI, RIVN, LCID, F, SNAP, AAL, BAC, WBD, GOLD, and more...');
+        }, 1000);
+    </script>
+</body>
+</html>
